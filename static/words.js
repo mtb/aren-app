@@ -8,7 +8,7 @@ window.addEventListener('DOMContentLoaded', () => {
   let shownCount = 0;
 
   function fetchWord() {
-    fetch(`/aren/api/word/${count}`)
+    fetch(`/api/word/${count}`)
       .then(res => res.json())
     .then(data => {
       // Split into syllables and alternate highlight
@@ -26,7 +26,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   backBtn.addEventListener('click', () => {
     // Navigate back to menu (index.html) under same base path
-    window.location.href = 'index.html';
+    window.location.href = '/index.html';
   });
 
   // SPACE key, click or touch on display to fetch next word

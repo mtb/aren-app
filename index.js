@@ -26,7 +26,7 @@ try {
 const app = express();
 app.use(cors());
 // Serve static frontend files
-app.use(express.static(path.join(__dirname, '../static')));
+app.use(express.static(path.join(__dirname, 'static')));
 const port = process.env.PORT || 3000;
 
 
@@ -53,10 +53,13 @@ app.get('/api/word/:count', (req, res) => {
   res.json({ word: list[idx] });
 });
 
-// Fallback to index.html for all other routes (SPA)
+// Fallback to index.html for all non-API routes (SPA)
+// Fallback to index.html for SPA routing (non-API requests)
 app.get('*', (req, res) => {
-  if (req.path.startsWith('/api/')) return res.status(404).end();
-  res.sendFile(path.join(__dirname, '../static/index.html'));
+  if (req.path.startsWith('/api/')) {
+    return res.status(404).end();
+  }
+  res.sendFile(path.join(__dirname, 'static', 'index.html'));
 });
 
 // Global error handler
