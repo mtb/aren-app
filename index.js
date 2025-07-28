@@ -31,7 +31,15 @@ app.use('/aren', express.static(path.join(__dirname)));
 const port = process.env.PORT || 3000;
 
 
+// Dynamically load and parse JSON word lists by syllable count
+// Each file matching '<n>_syllable.json' populates wordBuckets[n]
+
 // GET random word from all words (root and under '/aren')
+/**
+ * Handler to send a random word from the combined word list.
+ * @param {import('express').Request} req - The Express request object
+ * @param {import('express').Response} res - The Express response object
+ */
 function sendRandomWord(req, res) {
   const idx = Math.floor(Math.random() * words.length);
   res.json({ word: words[idx] });
@@ -39,6 +47,11 @@ function sendRandomWord(req, res) {
 app.get('/api/word', sendRandomWord);
 
 // GET available syllable counts for words
+/**
+ * Handler to send the available syllable counts.
+ * @param {import('express').Request} req - The Express request object
+ * @param {import('express').Response} res - The Express response object
+ */
 function sendWordCounts(req, res) {
   const counts = Object.keys(wordBuckets)
     .map(n => parseInt(n, 10))
@@ -49,6 +62,12 @@ app.get('/api/word-counts', sendWordCounts);
 app.get('/aren/api/word-counts', sendWordCounts);
 
 // GET random word with exact syllable count
+/**
+ * Handler to send a random word for a specified syllable count.
+ * @param {import('express').Request} req - The Express request object
+ *   req.params.count (number): desired syllable count
+ * @param {import('express').Response} res - The Express response object
+ */
 function sendWordByCount(req, res) {
   const count = parseInt(req.params.count, 10);
   const list = wordBuckets[count];

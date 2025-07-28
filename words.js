@@ -7,6 +7,20 @@ window.addEventListener('DOMContentLoaded', () => {
   const backBtn = document.getElementById('back');
   let shownCount = 0;
 
+  // Palette of background colors with sufficient contrast against white text
+  const colors = [
+    '#1abc9c', '#3498db', '#9b59b6', '#e67e22',
+    '#e74c3c', '#2ecc71', '#16a085', '#27ae60'
+  ];
+  let lastColor = null;
+  function changeBackgroundColor() {
+    let newColor;
+    do {
+      newColor = colors[Math.floor(Math.random() * colors.length)];
+    } while (newColor === lastColor);
+    lastColor = newColor;
+    document.body.style.backgroundColor = newColor;
+  }
   function fetchWord() {
     fetch(`api/word/${count}`)
       .then(res => res.json())
@@ -21,6 +35,8 @@ window.addEventListener('DOMContentLoaded', () => {
       // Increment and display counter
       shownCount++;
       counterEl.textContent = shownCount;
+      // Change background color on each word display
+      changeBackgroundColor();
     });
   }
 
