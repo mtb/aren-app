@@ -25,8 +25,8 @@ try {
 
 const app = express();
 app.use(cors());
-// Serve static frontend files
-app.use(express.static(path.join(__dirname, 'static')));
+// Serve static frontend files from project root
+app.use(express.static(path.join(__dirname)));
 const port = process.env.PORT || 3000;
 
 
@@ -54,12 +54,9 @@ app.get('/api/word/:count', (req, res) => {
 });
 
 // Fallback to index.html for all non-API routes (SPA)
-// Fallback to index.html for SPA routing (non-API requests)
 app.get('*', (req, res) => {
-  if (req.path.startsWith('/api/')) {
-    return res.status(404).end();
-  }
-  res.sendFile(path.join(__dirname, 'static', 'index.html'));
+  if (req.path.startsWith('/api/')) return res.status(404).end();
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // Global error handler
