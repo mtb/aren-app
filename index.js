@@ -25,38 +25,48 @@ try {
 
 const app = express();
 app.use(cors());
-// Serve static frontend files from project root
+// Serve static frontend files from project root and under '/aren'
 app.use(express.static(path.join(__dirname)));
+app.use('/aren', express.static(path.join(__dirname)));
 const port = process.env.PORT || 3000;
 
 
-// GET random word from all words
-app.get('/api/word', (req, res) => {
+// GET random word from all words (root and under '/aren')
+function sendRandomWord(req, res) {
   const idx = Math.floor(Math.random() * words.length);
   res.json({ word: words[idx] });
-});
+}
+app.get('/api/word', sendRandomWord);
 
 // GET available syllable counts for words
-app.get('/api/word-counts', (req, res) => {
+function sendWordCounts(req, res) {
   const counts = Object.keys(wordBuckets)
     .map(n => parseInt(n, 10))
     .sort((a, b) => a - b);
   res.json({ counts });
-});
+}
+app.get('/api/word-counts', sendWordCounts);
+app.get('/aren/api/word-counts', sendWordCounts);
 
 // GET random word with exact syllable count
-app.get('/api/word/:count', (req, res) => {
+function sendWordByCount(req, res) {
   const count = parseInt(req.params.count, 10);
   const list = wordBuckets[count];
   if (!list) return res.status(404).json({ error: 'No words of that syllable count' });
   const idx = Math.floor(Math.random() * list.length);
   res.json({ word: list[idx] });
-});
+}
+app.get('/api/word/:count', sendWordByCount);
+app.get('/aren/api/word/:count', sendWordByCount);
 
 // Fallback to index.html for all non-API routes (SPA)
-// Fallback to index.html for SPA (non-API requests)
+// Fallback to index.html for SPA (non-API requests) at root and '/aren'
 app.get('*', (req, res) => {
   if (req.path.startsWith('/api/')) return res.status(404).end();
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+app.get('/aren/*', (req, res) => {
+  if (req.path.startsWith('/aren/api/')) return res.status(404).end();
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
