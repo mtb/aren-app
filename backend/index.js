@@ -24,21 +24,22 @@ try {
 }
 
 const app = express();
+// If deploying under a subpath, adjust this prefix
+const basePath = '/aren';
 app.use(cors());
-// Serve frontend static files
-app.use(express.static(path.join(__dirname, '../frontend')));
+// Serve frontend static files at the basePath
+app.use(basePath, express.static(path.join(__dirname, '../frontend')));
 const port = process.env.PORT || 3000;
 
 
-// GET /api/word
 // GET random word from all words
-app.get('/api/word', (req, res) => {
+app.get(`${basePath}/api/word`, (req, res) => {
   const idx = Math.floor(Math.random() * words.length);
   res.json({ word: words[idx] });
 });
 
 // GET available syllable counts for words
-app.get('/api/word-counts', (req, res) => {
+app.get(`${basePath}/api/word-counts`, (req, res) => {
   const counts = Object.keys(wordBuckets)
     .map(n => parseInt(n, 10))
     .sort((a, b) => a - b);
@@ -46,7 +47,7 @@ app.get('/api/word-counts', (req, res) => {
 });
 
 // GET random word with exact syllable count
-app.get('/api/word/:count', (req, res) => {
+app.get(`${basePath}/api/word/:count`, (req, res) => {
   const count = parseInt(req.params.count, 10);
   const list = wordBuckets[count];
   if (!list) return res.status(404).json({ error: 'No words of that syllable count' });
@@ -54,10 +55,11 @@ app.get('/api/word/:count', (req, res) => {
   res.json({ word: list[idx] });
 });
 
-// Fallback to index.html for SPA routing
-// Serve index.html for non-API routes
-app.use((req, res, next) => {
-  if (req.path.startsWith('/api/')) return next();
+// Serve index.html for basePath and any subpaths under it (SPA routing)
+app.get(basePath, (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/index.html'));
+});
+app.get(`${basePath}/*`, (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
