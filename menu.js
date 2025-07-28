@@ -1,7 +1,7 @@
 // menu.js: builds syllable-count buttons and navigates to words page
 window.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById('wordCounts');
-  fetch('/api/word-counts')
+  fetch('api/word-counts')
     .then(res => res.json())
     .then(data => {
       data.counts.forEach(count => {
