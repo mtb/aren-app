@@ -37,17 +37,34 @@
   align-items: center;
 }
 
+#menu {
+  background: radial-gradient(ellipse at center, #333 0%, #000 100%);
+}
+
 /* Main heading */
 #menu h1 {
-  font-size: 3rem;
-  margin-bottom: 2rem;
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  animation: fadeIn 0.5s ease-in-out forwards;
+  opacity: 0;
+}
+
+.subtitle {
+  font-size: 1.5rem;
+  color: #aaa;
+  margin-bottom: 3rem;
+  animation: fadeIn 0.5s ease-in-out 0.2s forwards;
+  opacity: 0; /* Start hidden for animation */
 }
 
 /* Buttons container */
 .buttons {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 1rem;
+  animation: fadeIn 0.5s ease-in-out 0.4s forwards;
+  opacity: 0;
 }
 
 
@@ -158,5 +175,11 @@
   }
   .buttons button {
     flex: 1 1 100%;
+  }
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
   }
 }
