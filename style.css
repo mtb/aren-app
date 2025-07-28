@@ -13,6 +13,10 @@
   font-family: 'Dongle', sans-serif;
   font-weight: normal;
   text-align: center;
+  transition: background-color 0.5s ease;
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10+ */
+  user-select: none; /* Standard syntax */
 }
 
 /* Hide elements */
@@ -85,12 +89,21 @@
 }
 
 /* Display area for words */
-/* Display area for words */
 #display {
-  font-size:20rem;
+  width: 80vw; /* 80% of viewport width */
+  height: 20vh; /* 20% of viewport height */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3vw; /* Add space between syllables */
+  font-size: 15vw; /* Responsive font size */
   font-weight: normal;
-  margin-bottom: 2rem;
   cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.75);
+  padding: 1rem;
+  border-radius: 20px;
+  color: #fff; /* Base text color for display */
+  line-height: 1; /* Adjust line height for large font */
 }
 
 /* Back button positioning */
@@ -106,7 +119,7 @@
 }
 /* Dimmed syllable for alternating effect */
 .dim {
-  color: #777;
+  color: #aaa;
 }
  
 /* Counter styling */
@@ -130,7 +143,9 @@
   }
   /* Adjust display font size */
   #display {
-    font-size: 5rem;
+    width: 90vw;
+    height: 40vh;
+    font-size: 20vw;
   }
   /* Adjust heading size */
   #menu h1 {

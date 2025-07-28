@@ -5,12 +5,14 @@ window.addEventListener('DOMContentLoaded', () => {
   const display = document.getElementById('display');
   const counterEl = document.getElementById('counter');
   const backBtn = document.getElementById('back');
+  const practiceDiv = document.getElementById('practice');
   let shownCount = 0;
+  let isFetching = false;
 
-  // Palette of background colors with sufficient contrast against white text
+  // Palette of darker, muted background colors
   const colors = [
-    '#1abc9c', '#3498db', '#9b59b6', '#e67e22',
-    '#e74c3c', '#2ecc71', '#16a085', '#27ae60'
+    '#0d5e4e', '#1a4c6e', '#4e2d5b', '#733f11',
+    '#74261e', '#176639', '#0b5043', '#145730'
   ];
   let lastColor = null;
   function changeBackgroundColor() {
@@ -19,12 +21,15 @@ window.addEventListener('DOMContentLoaded', () => {
       newColor = colors[Math.floor(Math.random() * colors.length)];
     } while (newColor === lastColor);
     lastColor = newColor;
-    document.body.style.backgroundColor = newColor;
+    practiceDiv.style.backgroundColor = newColor;
   }
   function fetchWord() {
-    fetch(`api/word/${count}`)
+    if (isFetching) return;
+    isFetching = true;
+
+    fetch(`/api/word/${count}`)
       .then(res => res.json())
-    .then(data => {
+      .then(data => {
       // Split into syllables and alternate highlight
       const syllables = data.word.split(' ');
       // Wrap each syllable in a span, alternating highlight and dim classes
@@ -37,7 +42,14 @@ window.addEventListener('DOMContentLoaded', () => {
       counterEl.textContent = shownCount;
       // Change background color on each word display
       changeBackgroundColor();
-    });
+      })
+      .catch(err => {
+        console.error('Error fetching word:', err);
+        changeBackgroundColor();
+      })
+      .finally(() => {
+        isFetching = false;
+      });
   }
 
   backBtn.addEventListener('click', () => {
