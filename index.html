@@ -25,5 +25,17 @@
     <div class="buttons" id="wordCounts"></div>
   </div>
   <script src="menu.js"></script>
+  <script>
+    // Force landscape orientation on mobile devices
+    window.addEventListener('DOMContentLoaded', () => {
+      try {
+        if (typeof screen.orientation?.lock === 'function') {
+          screen.orientation.lock('landscape');
+        }
+      } catch (e) {
+        console.warn('Could not lock screen orientation.');
+      }
+    });
+  </script>
 </body>
 </html>
