@@ -54,6 +54,7 @@ app.get('/api/word/:count', (req, res) => {
 });
 
 // Fallback to index.html for all non-API routes (SPA)
+// Fallback to index.html for SPA (non-API requests)
 app.get('*', (req, res) => {
   if (req.path.startsWith('/api/')) return res.status(404).end();
   res.sendFile(path.join(__dirname, 'index.html'));
