@@ -4,6 +4,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const params = new URLSearchParams(window.location.search);
   const count = params.get('count');
   const display = document.getElementById('display');
+  const flaggedWords = new Set(); // track words already flagged
   // Add red-flag button for marking words to check (once)
   if (!document.getElementById('flag')) {
     const flagBtn = document.createElement('button');
@@ -16,7 +17,17 @@ window.addEventListener('DOMContentLoaded', () => {
     document.body.appendChild(flagBtn);
     flagBtn.addEventListener('click', () => {
       const current = display.textContent;
-      fetch('/api/check-word', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ word: current }) });
+      // Only report once per word
+      if (flaggedWords.has(current)) return;
+      fetch('/api/check-word', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ word: current })
+      }).then(() => {
+        flaggedWords.add(current);
+        // indicate flagged state
+        flagBtn.innerHTML = '🚩✓';
+      }).catch(err => console.error('Flag failed:', err));
     });
   }
   const counterEl = document.getElementById('counter');
@@ -101,6 +112,12 @@ window.addEventListener('DOMContentLoaded', () => {
           const cls = (i % 2 === 0) ? 'highlight' : 'dim';
           return `<span class="${cls}">${s}</span>`;
         }).join(' ');
+        // update flag button for new word
+        const flagBtn = document.getElementById('flag');
+        if (flagBtn) {
+          const curr = display.textContent;
+          flagBtn.innerHTML = flaggedWords.has(curr) ? '🚩✓' : '🚩';
+        }
         // Skip initial load count, then increment counter
         if (skipInitial) {
           skipInitial = false;
