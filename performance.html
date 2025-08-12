@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Performance Sessions</title>
+  <style>
+    body { font-family: sans-serif; padding: 1rem; }
+    table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    th, td { border: 1px solid #ccc; padding: 0.5rem; text-align: left; }
+    th { background: #f4f4f4; }
+    a { color: blue; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <h1>Performance Sessions</h1>
+  <table id="sessions">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>IP</th>
+        <th>Mode</th>
+        <th>Target</th>
+        <th>Finished</th>
+        <th>Details</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <script>
+    const base = window.location.pathname.startsWith('/aren') ? '/aren' : '';
+    fetch(`${base}/api/performance`)
+      .then(r => r.json())
+      .then(data => {
+        const tbody = document.querySelector('#sessions tbody');
+        data.sessions.forEach(s => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${new Date(s.startedAt).toLocaleString()}</td>
+            <td>${s.ip}</td>
+            <td>${s.countMode}</td>
+            <td>${s.targetCount}</td>
+            <td>${s.finishedAt ? new Date(s.finishedAt).toLocaleString() : ''}</td>
+            <td><a href="/performance/${s.sessionId}">View</a></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      });
+  </script>
+</body>
+</html>

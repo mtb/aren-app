@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Words Needing Check</title>
+  <style>
+    body { font-family: sans-serif; padding: 1rem; }
+    ul { margin-top: 1rem; }
+    li { padding: 0.5rem 0; border-bottom: 1px solid #ccc; }
+  </style>
+</head>
+<body>
+  <h1>Words Needing Review</h1>
+  <ul id="list"></ul>
+  <script>
+    fetch('/api/check-list')
+      .then(r => r.json())
+      .then(data => {
+        const ul = document.getElementById('list');
+        data.words.forEach(w => {
+          const li = document.createElement('li');
+          li.textContent = w;
+          ul.appendChild(li);
+        });
+      });
+  </script>
+  <!-- Button to clear the check list -->
+  <button id="emptyBtn" style="margin-top:1rem;padding:0.5rem 1rem;">Empty</button>
+  <script>
+    // Double confirmation before clearing the check list
+    document.getElementById('emptyBtn').addEventListener('click', () => {
+      if (confirm('Are you sure you want to clear all words?')
+          && confirm('This cannot be undone. Really empty the list?')) {
+        fetch('/api/check-list', { method: 'DELETE' })
+          .then(res => res.json())
+          .then(resp => {
+            if (resp.ok) {
+              document.getElementById('list').innerHTML = '';
+            } else {
+              alert('Failed to clear list');
+            }
+          });
+      }
+    });
+  </script>
+</body>
+</html>

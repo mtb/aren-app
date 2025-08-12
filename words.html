@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="Content-Language" content="tr">
+  <meta http-equiv="Content-Language" content="tr">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Aren Okuyor - Kelimeler</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Favicon and App Icons -->
+  <link rel="icon" href="/icons/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/android-chrome-192x192.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/icons/android-chrome-512x512.png">
+  <link rel="manifest" href="/icons/site.webmanifest">
+  <meta name="theme-color" content="#000000">
+</head>
+<body>
+  <div id="practice">
+    <div id="counter">0</div>
+    <div id="display"></div>
+    <button id="back">Geri</button>
+  </div>
+  <script src="words.js"></script>
+  <script>
+    // Force landscape orientation on mobile devices
+    window.addEventListener('DOMContentLoaded', () => {
+      try {
+        if (typeof screen.orientation?.lock === 'function') {
+          screen.orientation.lock('landscape');
+        }
+      } catch (e) {
+        console.warn('Could not lock screen orientation.');
+      }
+    });
+  </script>
+</body>
+</html>

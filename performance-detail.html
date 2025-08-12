@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Session Details</title>
+  <style>
+    body { font-family: sans-serif; padding: 1rem; }
+    table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    th, td { border: 1px solid #ccc; padding: 0.5rem; text-align: left; }
+    th { background: #f4f4f4; }
+    a { color: blue; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <h1>Session Details</h1>
+  <div id="info"></div>
+  <table id="details">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Word</th>
+        <th>Seconds</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <script>
+    const id = window.location.pathname.split('/').pop();
+    // Determine correct base depending on deployment subpath
+    const base = window.location.pathname.startsWith('/aren') ? '/aren' : '';
+    fetch(`${base}/api/performance/${id}`)
+      .then(r => r.json())
+      .then(data => {
+        const s = data.session;
+        document.getElementById('info').innerHTML = `
+          Session: ${s.sessionId}<br>
+          Started: ${new Date(s.startedAt).toLocaleString()}<br>
+          Finished: ${new Date(s.finishedAt).toLocaleString()}<br>
+          Mode: ${s.countMode}<br>
+          Target: ${s.targetCount}
+        `;
+        const tbody = document.querySelector('#details tbody');
+        // Safely handle sessions with or without a words array
+        const words = Array.isArray(s.words) ? s.words : [];
+        const durations = Array.isArray(s.durations) ? s.durations : [];
+        // Iterate through the larger of words or durations
+        const count = words.length;
+        for (let i = 0; i < count; i++) {
+          const tr = document.createElement('tr');
+          const word = words[i] || '';
+          const seconds = durations[i] != null ? durations[i].toFixed(2) : '';
+          tr.innerHTML = `<td>${i+1}</td><td>${word}</td><td>${seconds}</td>`;
+          tbody.appendChild(tr);
+        }
+      });
+  </script>
+</body>
+</html>
