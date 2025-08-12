@@ -4,7 +4,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const base = window.location.pathname.startsWith('/aren') ? '/aren' : '';
   const container = document.getElementById('wordCounts');
   // fetch from Express API (no physical /api folder needed)
-  fetch('api/word-counts')
+  fetch(`${base}/api/word-counts`)
     .then(res => {
       if (!res.ok) throw new Error('word-counts status ' + res.status);
       return res.json();
@@ -15,7 +15,7 @@ window.addEventListener('DOMContentLoaded', () => {
         btn.textContent = `${count} Hece`;
         btn.dataset.count = count;
         btn.addEventListener('click', () => {
-          window.location.href = `words.html?count=${count}`;
+          window.location.href = `${base}/words.html?count=${count}`;
         });
         container.appendChild(btn);
       });
@@ -24,7 +24,7 @@ window.addEventListener('DOMContentLoaded', () => {
       randBtn.textContent = 'Karışık';
       randBtn.dataset.count = 'random';
       randBtn.addEventListener('click', () => {
-        window.location.href = `words.html?count=random`;
+        window.location.href = `${base}/words.html?count=random`;
       });
       container.appendChild(randBtn);
     })
