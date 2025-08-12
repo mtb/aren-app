@@ -16,3 +16,6 @@ yarn-debug.log*
 
 # Performance logs directory
 performance/
+
+# Review log file for flagged words
+words_needs_to_check.log
