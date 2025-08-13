@@ -2,6 +2,12 @@
 
  All notable changes to this project are documented in this file.
 
+## [1.4.0] - 2025-08-13
+### Added
+- iOS `apple-touch-startup-image` tags for native splash on Add to Home Screen.
+- Full-screen in-page splash overlay as a fallback for slow loads.
+- `SPLASH_GUIDANCE.md` documentation detailing splash setup across platforms.
+
  ## [1.3.0] - 2025-08-13
  ### Changed
  - Removed all diagnostic logging and cleaned up console.log statements.
